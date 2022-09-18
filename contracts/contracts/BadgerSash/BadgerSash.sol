@@ -6,14 +6,19 @@ import { BadgerSashInterface } from "./interfaces/BadgerSashInterface.sol";
 
 import { ERC1155Upgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import { ERC1155ReceiverUpgradeable } from "@openzeppelin/contracts-upgradeable/token/ERC1155/utils/ERC1155ReceiverUpgradeable.sol";
+import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 
 import { BadgerScout } from "./BadgerScout.sol";
+
+import "hardhat/console.sol";
 
 contract BadgerSash is 
       BadgerSashInterface
     , ERC1155Upgradeable
     , BadgerScout
 {
+    using Strings for uint256;
+    using Strings for address;
     /**
      * @notice Allow money to be sent to this contract just in case some organization
      *         has that use case.
@@ -61,14 +66,15 @@ contract BadgerSash is
             return badges[_id].uri;
         } 
 
+        console.log('gets here');
         /// @dev Otherwise, return the default URI.
         return string(
             abi.encodePacked(
                   "https://badger.utc24.io/api/?seed="
                 , string(
                       abi.encodePacked(
-                          address(this)
-                        , _id
+                          address(this).toHexString()
+                        , _id.toString()
                       )
                  )
             )

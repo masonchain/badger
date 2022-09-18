@@ -44,22 +44,6 @@ contract BadgerScout is
     mapping(uint256 => Badge) public badges;
 
     /**
-     * @notice Initialize the Sash with the starting state needed.
-     * @param _owner The owner of the Sash. (Ideally a multi-sig).
-     */
-    // function _initialize(
-    //     address _owner
-    // )
-    //     internal
-    //     initializer
-    // { 
-    //     console.log("Scout is called");
-    //     /// @dev Initialize the ownership structure of this Sash.
-    //     __Ownable_init();
-    //     transferOwnership(_owner);
-    // }
-
-    /**
      * @notice Make sure that only owner or the leader of a badge passes.
      * @param _id The id of the badge being accessed.
      */

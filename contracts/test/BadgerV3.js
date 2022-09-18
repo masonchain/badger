@@ -11,6 +11,16 @@ const { ethers } = require("hardhat");
 //      cases: no payment token
 //             eth payment
 //             1155 payment
+// TODO: State var updates
+// TODO: Withdrawing ETH and ERC1155
+// TODO: Subscription Implementation
+// TODO: URI
+// TODO: Batch functions
+// TODO: Fail tests
+//       onlySewnBadge
+//       onlyLeader
+// TODO: Make every array field batchable
+
 describe("BadgerV3", function() {
     before(async() => {
         [owner, signer1, userSigner, leaderSigner, sigSigner] = await ethers.getSigners();
@@ -24,7 +34,7 @@ describe("BadgerV3", function() {
         house = await house.deployed();
     });
 
-    describe("New Sash", function() {
+    describe("No Payment Sash", function() {
         it('Initialized New Sash', async() => {
             cloneTx = await house.connect(owner).createSashPress("0x");
             cloneTx = await cloneTx.wait();
@@ -48,16 +58,21 @@ describe("BadgerV3", function() {
                   _badgeId                      //   uint256 _id
                 , true                          // , bool _accountBound
                 , signer1.address               // , address _signer
-                , "https://badger.utc24.io/2"   // , string memory _uri
+                , "https://badger.utc24.io/0"   // , string memory _uri
                 , _paymentToken                 // , paymentToken memory _paymentToken
                 , []                            // , address[] memory _leaders
             )
 
             const { signer } = await sashPress.badges(0);
-            console.log("signer", signer)
 
             assert.equal(signer.toString(), signer1.address);
         });
+
+        it('Badge has correct URI', async() => {
+            let uri = await sashPress.uri(0)
+            assert.equal(uri, "https://badger.utc24.io/0")
+            console.log(await sashPress.uri(1));
+        })
 
         it('Owner can designate leader', async() => {
             await sashPress.setLeaders(0, [leaderSigner.address, signer1.address], [true, true]);
@@ -202,5 +217,13 @@ describe("BadgerV3", function() {
             const balanceAfter = await sashPress.balanceOf(userSigner.address, _badgeId);
             assert.equal(balanceAfter, balanceBefore - _quantity)
         });
+    });
+
+    describe("", function() {
+
+    });
+
+    describe("ETH Payment Sash", function() {
+        
     });
 })
