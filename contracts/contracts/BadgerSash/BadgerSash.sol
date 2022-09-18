@@ -32,11 +32,12 @@ contract BadgerSash is
         external
         initializer
     { 
-        /// @dev Initialize the BadgeScout contract.
-        _initialize(_owner);
-
         /// @dev Initialize the NFT side of the Sash.
         __ERC1155_init(_uri);
+        /// @dev Initialize the BadgeScout contract.
+        // _initialize(_owner);
+        __Ownable_init();
+        transferOwnership(_owner);
     }
 
     /**

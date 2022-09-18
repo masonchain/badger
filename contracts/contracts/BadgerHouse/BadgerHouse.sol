@@ -16,7 +16,7 @@ import { Clones } from "@openzeppelin/contracts/proxy/Clones.sol";
  * @notice A contract that allows users to mint Badger Sash NFTs with a permissionless system
  *         that has two operating states. Free to use, and subscription based. The subscription
  *         operates through the purchasing of an ERC1155 token that is then sent to this contract
- *         to as a form of permanent staking. 
+ *         to as a form of permanent staking.
  */
 contract BadgerHouse is 
       Ownable
@@ -92,10 +92,10 @@ contract BadgerHouse is
     {
         /// @dev Get the address of the target.
         address sashAddress = address(sashImplementation).clone();
-
+        
         /// @dev Interface with the newly created contract to initialize it. 
         BadgerSashInterface sash = BadgerSashInterface(sashAddress);
-
+        
         /// @dev Deploy the clone contract to serve as the Press for the Sash and it's badges.
         sash.initialize(
               _deployer

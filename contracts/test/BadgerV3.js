@@ -6,6 +6,11 @@ var chai = require('chai')
 
 const { ethers } = require("hardhat");
 
+
+// TODO: Payment token needs to be tested THOROUGHLY tested.
+//      cases: no payment token
+//             eth payment
+//             1155 payment
 describe("BadgerV3", function() {
     before(async() => {
         [owner, signer1, userSigner, leaderSigner, sigSigner] = await ethers.getSigners();
@@ -21,7 +26,7 @@ describe("BadgerV3", function() {
 
     describe("New Sash", function() {
         it('Initialized New Sash', async() => {
-            cloneTx = await house.connect(owner).createSashPress("");
+            cloneTx = await house.connect(owner).createSashPress("0x");
             cloneTx = await cloneTx.wait();
             
             sashPressAddress = cloneTx.events[0].address;
@@ -32,17 +37,24 @@ describe("BadgerV3", function() {
 
         it('Can create Sash', async() => {
             const _badgeId = 0;
+            const _paymentToken = [
+                0,                          // enum TOKEN_TYPE
+                signer1.address,            // address tokenAddress
+                0,                          // uint256 tokenId
+                0                           // uint256 quantity
+            ]
             
             await sashPress.connect(owner).setBadge(
                   _badgeId                      //   uint256 _id
                 , true                          // , bool _accountBound
                 , signer1.address               // , address _signer
                 , "https://badger.utc24.io/2"   // , string memory _uri
-                , 0                             // , uint128 aux
+                , _paymentToken                 // , paymentToken memory _paymentToken
                 , []                            // , address[] memory _leaders
             )
 
             const { signer } = await sashPress.badges(0);
+            console.log("signer", signer)
 
             assert.equal(signer.toString(), signer1.address);
         });

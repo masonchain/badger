@@ -12,8 +12,7 @@ import { ECDSA } from "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
 import { IERC1155 } from "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 
 contract BadgerScout is 
-      Initializable 
-    , OwnableUpgradeable
+      OwnableUpgradeable
     , ERC1155HolderUpgradeable 
 { 
     using ECDSA for bytes32;
@@ -48,16 +47,17 @@ contract BadgerScout is
      * @notice Initialize the Sash with the starting state needed.
      * @param _owner The owner of the Sash. (Ideally a multi-sig).
      */
-    function _initialize(
-        address _owner
-    )
-        internal
-        initializer
-    { 
-        /// @dev Initialize the ownership structure of this Sash.
-        __Ownable_init();
-        transferOwnership(_owner);
-    }
+    // function _initialize(
+    //     address _owner
+    // )
+    //     internal
+    //     initializer
+    // { 
+    //     console.log("Scout is called");
+    //     /// @dev Initialize the ownership structure of this Sash.
+    //     __Ownable_init();
+    //     transferOwnership(_owner);
+    // }
 
     /**
      * @notice Make sure that only owner or the leader of a badge passes.
