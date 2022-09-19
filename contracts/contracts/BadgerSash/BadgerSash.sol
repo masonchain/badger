@@ -10,8 +10,6 @@ import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
 
 import { BadgerScout } from "./BadgerScout.sol";
 
-import "hardhat/console.sol";
-
 contract BadgerSash is 
       BadgerSashInterface
     , ERC1155Upgradeable
@@ -66,7 +64,6 @@ contract BadgerSash is
             return badges[_id].uri;
         } 
 
-        console.log('gets here');
         /// @dev Otherwise, return the default URI.
         return string(
             abi.encodePacked(
