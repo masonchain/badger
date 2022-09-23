@@ -18,70 +18,8 @@ contract BadgerHouse is
     constructor(
         address _implementation
     ) 
-<<<<<<< HEAD
-        internal 
-    {
-        sashImplementation = BadgerSashInterface(_sashImplementation);
-    }
-
-    /**
-     * See {BadgerHouse._setSashImplementation}
-     * 
-     * Requirements:
-     * - The caller must be the owner.
-     */    
-    function setSashImplementation(
-        address _sashImplementation
-    ) 
-        public 
-        onlyOwner()
-    {
-        _setSashImplementation(_sashImplementation);
-    }    
-
-    /**
-     * @notice Sets the subscription implementation which allows the Badger protocol to
-     *         exit growth mode and enable the subscription feature.
-     *
-     * Requirements:
-     * - The caller must be the owner.
-     */
-    function setSubscriptionImplementation(
-        address _subscriptionImplementation
-    )
-        public 
-        onlyOwner()
-    {
-        subscriptionImplementation = IERC1155(_subscriptionImplementation);
-    }
-
-    /**
-     * @notice Creates a new Sash contract to be led by the deploying address.
-     * @param _deployer The address that will be the deployer of the Sash contract.
-     * @dev The Sash contract is created using the Sash implementation contract.
-     */
-    function _createSashPress(
-          address _deployer
-        , string memory _uri
-    )
-        internal
-    {
-        /// @dev Get the address of the target.
-        address sashAddress = address(sashImplementation).clone();
-        
-        /// @dev Interface with the newly created contract to initialize it. 
-        BadgerSashInterface sash = BadgerSashInterface(sashAddress);
-        
-        /// @dev Deploy the clone contract to serve as the Press for the Sash and it's badges.
-        sash.initialize(
-              _deployer
-            , _uri
-        );
-    }
-=======
         BadgerVersions(_implementation) 
     {}
->>>>>>> main
 
     /**
      * @notice Creates a new Sash act whie while the subscription model is NOT enabled.
