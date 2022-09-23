@@ -19,10 +19,21 @@ button {
   cursor: pointer;
 }
 
+.button-unstyled {
+  background: none;
+  border: none;
+  padding: 0px;
+  text-align: left;
+  all: none;
+}
+
 .lead { 
   font-size: 18px;
 }
 
+.internal-link {
+  text-decoration: none;
+}
 
 @media screen and (max-width: 3000px) {
   .page-margins{

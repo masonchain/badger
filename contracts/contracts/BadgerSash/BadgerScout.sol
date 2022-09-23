@@ -194,6 +194,48 @@ contract BadgerScout is
     }
 
     /**
+     * @notice Allow the owner of the organization to control the leaders of multiple badges in one transaction.
+     * @dev This functionality is not exposed through the Dashboard UI however you can call this function directly.
+     * @param _ids The ids of the badges.
+     * @param _leaders The address of the leader that we are updating the status of.
+     * @param _isLeader The status of the leaders being updated.
+     * 
+     * Requirements:
+     * - Only the owner of the contract can call this function.
+     * - `_id` must corresponding to an existing Badge config.
+     */
+    function setLeadersBatch(
+          uint256[] calldata _ids
+        , address[] calldata _leaders
+        , bool[] calldata _isLeader
+    )
+        external
+        virtual
+        onlyOwner()
+    {
+        require(
+                   _ids.length == _leaders.length 
+                && _leaders.length == _isLeader.length
+            , "BadgeSash::revokeFullBatch: _froms, _ids, and _amounts must be the same length."
+        );
+
+        /// @dev Loop through the leaders and update their status.        
+        for (
+            uint256 i; 
+            i < _ids.length; 
+            i++
+        ) {
+            /// @dev Make sure that this badge exists
+            require(
+                  bytes(badges[_ids[i]].uri).length != 0
+                , "BadgeSash::setLeadersBatch: Badge does not exist."
+            );
+
+            badges[_ids[i]].addressIsLeader[_leaders[i]] = _isLeader[i];
+        }
+    }
+
+    /**
      * @notice Allow anyone to see the leaders of the Badge.
      * @param _id The id of the badge.
      * @return The leaders of the badge.
@@ -252,49 +294,22 @@ contract BadgerScout is
         return message.toEthSignedMessageHash().recover(_signature) == badges[_id].signer;
     }
 
-
     /**
-     * @notice Allows the owner of a Sash to withdraw funds that it has generated.
-     * 
-     * Requirements:
-     * - `_msgSender` must be the owner of the Sash.
+     * @notice Allows the Owner to execute an Organization level transaction.
+     * @param _to The address to execute the transaction on.
+     * @param _data The data to pass to the receiver.
+     * @param _value The amount of ETH to send with the transaction.
      */
-    function withdrawETH()
-        external
-        virtual
-        onlyOwner()
-    {
-        (bool success, ) = owner().call{value: address(this).balance}("");
-
-        require(
-              success
-            , "BadgeSash::withdrawETH: Failed to withdraw ETH."
-        );
-    }
-
-    /**
-     * @notice Allows the owner of a Sash to withdraw any 1155s that it has generated. 
-     * @param _token The address of the token to withdraw.
-     * @param _to The address to send the tokens to.
-     * @param _id The id of the token to withdraw.
-     * @param _amount The amount of the token to withdraw.
-     */
-    function withdrawERC1155(
-          address _token
-        , address _to
-        , uint256 _id
-        , uint256 _amount
+    function execTransaction(
+          address _to
+        , bytes calldata _data
+        , uint256 _value
     )
         external
-        virtual
+        payable
         onlyOwner()
     {
-        IERC1155(_token).safeTransferFrom(
-              address(this)
-            , _to
-            , _id
-            , _amount
-            , ""
-        );
+        (bool success, bytes memory returnData) = _to.call{value: _value}(_data);
+        require(success, string(returnData));
     }
 }
